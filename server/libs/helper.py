@@ -7,7 +7,7 @@ def check_exist():
     else:
         return False
 
-def get_config(platform):
+def get_config():
     configInstance = configparser.ConfigParser()
     if not check_exist():
         print('run init first')
