@@ -1,4 +1,5 @@
 import configparser
+import json
 
 def check_exist():
     """检测所需文件是否存在"""
@@ -15,6 +16,8 @@ def get_config():
     configInstance.read('config.ini')
     return configInstance
     pass
+
+def get_config_json():
 
 def init():
     configInstance = configparser.ConfigParser()
