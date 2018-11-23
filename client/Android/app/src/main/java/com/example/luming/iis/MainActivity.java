@@ -4,21 +4,26 @@ import android.content.DialogInterface;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends Activity
 {
-    private TableLayout tableLayout;
+    private DatabaseOperator dbOperator;
+    private List<Device> DeviceList = new ArrayList<Device>();
     private Button btnAdd;
-    private int num = 0;
-
+    private deviceAdapter adapter;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.content_main);
-
-        tableLayout = (TableLayout) this.findViewById(R.id.tableLayout);
+        dbOperator = new DatabaseOperator(this);
+        adapter = new deviceAdapter( MainActivity.this,R.layout.list_item, DeviceList );
+        ListView listView = (ListView) findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
         btnAdd = (Button) this.findViewById(R.id.btnAdd);
-
         btnAdd.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -41,12 +46,13 @@ public class MainActivity extends Activity
                     public void onClick(DialogInterface dialog, int which)
                     {
                         // 获取
-                        String a = name.getText().toString().trim();
-                        String b = ip.getText().toString().trim();
-                        String c = port.getText().toString().trim();
+                        String device_name = name.getText().toString().trim();
+                        String device_ip = ip.getText().toString().trim();
+                        String device_port = port.getText().toString().trim();
                         // 打印出来
-                        Toast.makeText(MainActivity.this, "名称: " + a + ", IP地址: " + b + "端口"+c, Toast.LENGTH_SHORT).show();
-
+                       Toast.makeText(MainActivity.this, "名称: " + device_name + ", IP地址: " + device_ip + "端口"+device_port, Toast.LENGTH_SHORT).show();
+                        dbOperator.add(new Device(device_name,device_ip,device_port));
+                        onResume();
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
@@ -60,28 +66,18 @@ public class MainActivity extends Activity
                 builder.show();
             }
         });
-    }
 
-    private void addRow()
+    }
+    protected void onResume()
     {
-        TableRow tableRow = new TableRow(this);
-        TextView textView = new TextView(this);
-        Button button = new Button(this);
+        super.onResume();
+        if(adapter != null){
+            DeviceList.clear();
+            DeviceList.addAll(dbOperator.queryAll());
+            adapter.notifyDataSetChanged();
+        }
 
-        textView.setText(String.valueOf(num));
-        button.setText("删除");
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                TableRow tableRow = (TableRow) view.getParent();
-                tableLayout.removeView(tableRow);
-            }
-        });
-        tableRow.addView(textView);
-        tableRow.addView(button);
-
-        tableLayout.addView(tableRow);
     }
+
+
 }
