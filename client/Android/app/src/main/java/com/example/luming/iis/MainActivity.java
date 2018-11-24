@@ -1,6 +1,7 @@
 package com.example.luming.iis;
 import android.app.*;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
@@ -13,8 +14,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -40,10 +39,16 @@ public class MainActivity extends Activity
             public void handleMessage(Message msg)
             {
                 super.handleMessage(msg);
-                if(msg.obj.equals("error"))
-                    Toast.makeText(MainActivity.this,"连接失败", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(MainActivity.this,msg.obj.toString(), Toast.LENGTH_SHORT).show();
+                switch (msg.what)
+                {
+                    case 1:
+                        Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 0:
+                        Toast.makeText(MainActivity.this, "连接失败" , Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         };
         this.setContentView(R.layout.content_main);
@@ -58,7 +63,6 @@ public class MainActivity extends Activity
                 //Toast.makeText(MainActivity.this, device.getName()+device.getIp()+device.getPort() , Toast.LENGTH_SHORT).show();
                 connection(device.getIp(),device.getPort());
                 Toast.makeText(MainActivity.this,"正在连接，请稍后", Toast.LENGTH_SHORT).show();
-
             }
 
         });
@@ -138,11 +142,13 @@ public class MainActivity extends Activity
                     out.write(json.toString().getBytes());
                     str = in.readLine();
                     JSONObject respons = new JSONObject(str);
+                    message.what = 1;
                     message.obj = respons;
                 }
                 catch(IOException e)
                 {
                     e.printStackTrace();
+                    message.what = 0;
                     message.obj = "error";
                 } catch (JSONException e) {
                     e.printStackTrace();

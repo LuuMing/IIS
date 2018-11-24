@@ -11,7 +11,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@null"
-        android:inputType="number"
+        android:inputType="text"
         android:maxLength="11"
         android:hint="请输入设备名称"
         android:drawablePadding="10dp"

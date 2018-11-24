@@ -25,6 +25,7 @@ class MyServer(socketserver.BaseRequestHandler):
 				respons = json.loads(f.read())
 				respons = json.dumps(respons)
 		elif data['type'] == 'control':
+
 			pass
 
 		conn.sendall(respons.encode())
