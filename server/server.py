@@ -3,6 +3,7 @@
 import socketserver
 import json
 import os
+import sys
 
 class MyServer(socketserver.BaseRequestHandler):
 	def handle(self):
@@ -12,7 +13,10 @@ class MyServer(socketserver.BaseRequestHandler):
 		data = json.loads(raw_data)
 		print(data,'receive')
 		if data['type'] == 'get':
-			os.system('./tools/ini2json config.ini')
+			if sys.platform == 'win32':
+				os.system('.\tools\ini2json.exe config.ini')
+			else
+				os.system('./tools/ini2json config.ini')
 			with open('config.json','r') as f:
 				respons = json.loads(f.read())
 				respons = json.dumps(respons)
