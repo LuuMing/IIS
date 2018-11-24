@@ -15,7 +15,7 @@ class MyServer(socketserver.BaseRequestHandler):
 		if data['type'] == 'get':
 			if sys.platform == 'win32':
 				os.system('.\tools\ini2json.exe config.ini')
-			else
+			else:
 				os.system('./tools/ini2json config.ini')
 			with open('config.json','r') as f:
 				respons = json.loads(f.read())
