@@ -4,8 +4,12 @@ import socketserver
 import json
 import os
 import sys
+from libs.helper import *
+
+config = None
 
 class MyServer(socketserver.BaseRequestHandler):
+        
 	def handle(self):
 		print(self.request,self.client_address,self.server)
 		conn = self.request
@@ -27,5 +31,6 @@ class MyServer(socketserver.BaseRequestHandler):
 		print(respons,'sended')
 
 if __name__ == '__main__':
+	config = get_config()
 	server = socketserver.ThreadingTCPServer(('',6666),MyServer)
 	server.serve_forever()
