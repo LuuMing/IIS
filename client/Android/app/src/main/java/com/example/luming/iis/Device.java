@@ -13,15 +13,14 @@ public class Device {
         this.ip = ip;
     }
 
-    public void setPort(String port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 
-    public Device(String name, String ip, String port) {
+    public Device(String name, String ip, Integer port) {
         this.name = name;
         this.ip = ip;
         this.port = port;
-
     }
 
     public String getName() {
@@ -32,12 +31,12 @@ public class Device {
         return ip;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
     private String name;
     private String ip;
-    private String port;
+    private Integer port;
 
 }

@@ -14,7 +14,7 @@ class MyServer(socketserver.BaseRequestHandler):
 		print(data,'receive')
 		if data['type'] == 'get':
 			if sys.platform == 'win32':
-				os.system('.\tools\ini2json.exe config.ini')
+				os.system('tools\ini2json.exe config.ini')
 			else:
 				os.system('./tools/ini2json config.ini')
 			with open('config.json','r') as f:
@@ -27,5 +27,5 @@ class MyServer(socketserver.BaseRequestHandler):
 		print(respons,'sended')
 
 if __name__ == '__main__':
-	server = socketserver.ThreadingTCPServer(('localhost',6666),MyServer)
+	server = socketserver.ThreadingTCPServer(('',6666),MyServer)
 	server.serve_forever()

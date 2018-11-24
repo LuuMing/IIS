@@ -29,7 +29,7 @@ public class DatabaseOperator {
         ArrayList<Device> list = new ArrayList<Device>();
         Cursor c = db.rawQuery("select name,ip,port from device_table", null);
         while (c.moveToNext()) {
-            Device device  = new Device(c.getString(0),c.getString(1),c.getString(2));
+            Device device  = new Device(c.getString(0),c.getString(1),c.getInt(2));
             list.add(device);
         }
         c.close();

@@ -31,7 +31,7 @@ public class deviceAdapter extends ArrayAdapter {
         //fruitImage.setImageResource(fruit.getImageId());//为图片视图设置图片资源
         deviceName.setText(device.getName());//为文本视图设置文本内容
         deviceIp.setText(device.getIp());//为文本视图设置文本内容
-        devicePort.setText(device.getPort());//为文本视图设置文本内容
+        devicePort.setText(device.getPort().toString());//为文本视图设置文本内容
         return view;
     }
 }
