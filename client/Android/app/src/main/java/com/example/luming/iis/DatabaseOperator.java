@@ -27,7 +27,7 @@ public class DatabaseOperator {
     public List<Device> queryAll()
     {
         ArrayList<Device> list = new ArrayList<Device>();
-        Cursor c = db.rawQuery("select * from device_table", null);
+        Cursor c = db.rawQuery("select name,ip,port from device_table", null);
         while (c.moveToNext()) {
             Device device  = new Device(c.getString(0),c.getString(1),c.getString(2));
             list.add(device);

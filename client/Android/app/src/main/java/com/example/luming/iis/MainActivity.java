@@ -23,6 +23,15 @@ public class MainActivity extends Activity
         adapter = new deviceAdapter( MainActivity.this,R.layout.list_item, DeviceList );
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(MainActivity.this, view.toString() , Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+
         btnAdd = (Button) this.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener()
         {

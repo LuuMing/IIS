@@ -1,4 +1,4 @@
-import configparser
+﻿import configparser
 import json
 
 def check_exist():
@@ -18,7 +18,7 @@ def get_config():
     pass
 
 def get_config_json():
-
+    pass
 def init():
     configInstance = configparser.ConfigParser()
     configInstance["target"] = {}
