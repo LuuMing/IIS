@@ -15,7 +15,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +40,10 @@ public class MainActivity extends Activity
             public void handleMessage(Message msg)
             {
                 super.handleMessage(msg);
-                if(msg.obj.equals("success"))
-                    Toast.makeText(MainActivity.this,"连接成功", Toast.LENGTH_SHORT).show();
+                if(msg.obj.equals("error"))
+                    Toast.makeText(MainActivity.this,"连接失败", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(MainActivity.this,msg.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,msg.obj.toString(), Toast.LENGTH_SHORT).show();
             }
         };
         this.setContentView(R.layout.content_main);
@@ -121,27 +123,27 @@ public class MainActivity extends Activity
     {
         new Thread()
         {
-            char [] buffer = new char[1024];
             @Override
             public void run()
             {
                 Message message = new Message();
                 try{
-                    socket = new Socket(HOST,PORT);
-                    socket.setSoTimeout(300);
+                    socket = new Socket();
+                    SocketAddress socketAddress = new InetSocketAddress(HOST,PORT);
+                    socket.connect(socketAddress,300);
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = socket.getOutputStream();
                     String str = "{\"type\":\"get\"}";
                     JSONObject json = new JSONObject(str);
                     out.write(json.toString().getBytes());
-                    in.read(buffer);
-                    System.out.print(buffer);
-                    message.obj = "success";
+                    str = in.readLine();
+                    JSONObject respons = new JSONObject(str);
+                    message.obj = respons;
                 }
                 catch(IOException e)
                 {
                     e.printStackTrace();
-                    message.obj = e.toString();
+                    message.obj = "error";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
