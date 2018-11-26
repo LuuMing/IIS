@@ -24,8 +24,22 @@ def get_config_json():
 def init():
     configInstance = configparser.ConfigParser()
     configInstance["target"] = {}
-    configInstance["target"]["platform"]  = sys.platform
-    
+    configInstance["target"]["type"] = "status"
+    configInstance["target"]["source"]  = "str"
+    configInstance["target"]["cmd"] = sys.platform
+    configInstance["target"]["ret_type"] = "string"
+
+    configInstance["debug"] = {}
+    configInstance["debug"]["type"] = "action"
+    configInstance["debug"]["source"] = "os"
+    configInstance["debug"]["cmd"] = "echo debug"
+
+    configInstance["debug2"] = {}
+    configInstance["debug2"]["type"] = "status"
+    configInstance["debug2"]["source"] = "os"
+    configInstance["debug2"]["cmd"] = "echo 123"
+    configInstance["debug2"]["ret_type"] = "int"
+
     with open('config.ini', 'w') as configfile:
         configInstance.write(configfile)
     print('done')

@@ -16,18 +16,24 @@ class MyServer(socketserver.BaseRequestHandler):
 		raw_data = conn.recv(1024).decode()
 		data = json.loads(raw_data)
 		print(data,'receive')
-		if data['type'] == 'get':
+		if data['name'] == 'get':
 			if sys.platform == 'win32':
 				os.system('tools\ini2json.exe config.ini')
 			else:
 				os.system('./tools/ini2json config.ini')
 			with open('config.json','r') as f:
 				respons = json.loads(f.read())
-				respons = json.dumps(respons)
-		elif data['type'] == 'control':
+		else:
+			component = config[data['name']]
+			if component['type'] == 'action':
+				if component['source']	== 'os':
+					os.system(component['cmd'])
+					respons = {'content':'success'}
 
-			pass
-
+			elif component['type'] == 'status':
+				if component['source'] == 'os':
+					respons = {'content':os.popen(component["cmd"]).read()}
+		respons = json.dumps(respons)
 		conn.sendall(respons.encode())
 		print(respons,'sended')
 
