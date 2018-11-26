@@ -43,6 +43,7 @@ public class MainActivity extends Activity
                 {
                     case 1:
                         Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                        intent.putExtra("json",(String) msg.obj);
                         startActivity(intent);
                         break;
                     case 0:
@@ -132,7 +133,7 @@ public class MainActivity extends Activity
             {
                 Message message = new Message();
                 try{
-                    socket = new Socket();
+                    mSocket socket = mSocket.getInstance();
                     SocketAddress socketAddress = new InetSocketAddress(HOST,PORT);
                     socket.connect(socketAddress,300);
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -141,9 +142,8 @@ public class MainActivity extends Activity
                     JSONObject json = new JSONObject(str);
                     out.write(json.toString().getBytes());
                     str = in.readLine();
-                    JSONObject respons = new JSONObject(str);
                     message.what = 1;
-                    message.obj = respons;
+                    message.obj = str;
                 }
                 catch(IOException e)
                 {
