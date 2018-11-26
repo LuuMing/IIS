@@ -138,7 +138,7 @@ public class MainActivity extends Activity
                     socket.connect(socketAddress,300);
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = socket.getOutputStream();
-                    String str = "{\"type\":\"get\"}";
+                    String str = "{\"name\":\"get\"}";
                     JSONObject json = new JSONObject(str);
                     out.write(json.toString().getBytes());
                     str = in.readLine();
