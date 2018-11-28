@@ -17,7 +17,7 @@ public class ManageActivity extends AppCompatActivity {
     BottomNavigationView navigationView;
     MenuItem   menuItem;
     List<Fragment> fragmentList = new ArrayList<>();
-
+    mSocket socket;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -42,7 +42,7 @@ public class ManageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
-        mSocket socket = mSocket.getInstance();
+         socket = mSocket.getInstance();
         navigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.viewpager_launch);
         setNavigation();
@@ -74,12 +74,10 @@ public class ManageActivity extends AppCompatActivity {
 
             }
         });
-        Fragment1 fragment1 = new Fragment1();
-        Fragment2 fragment2 = new Fragment2();
-        Fragment3 fragment3 = new Fragment3();
-        fragmentList.add(fragment1);
-        fragmentList.add(fragment2);
-        fragmentList.add(fragment3);
+        FragmentAction fragmentAction = new FragmentAction();
+
+        fragmentList.add(fragmentAction);
+
         BottomViewAdapter adapter = new BottomViewAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
