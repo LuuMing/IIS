@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -42,7 +43,8 @@ public class MainActivity extends Activity
                 switch (msg.what)
                 {
                     case 1:
-                        Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                        Toast.makeText(MainActivity.this, (String)msg.obj , Toast.LENGTH_SHORT).show();
+                       Intent intent = new Intent(MainActivity.this,ManageActivity.class);
                         intent.putExtra("json",(String) msg.obj);
                         startActivity(intent);
                         break;
@@ -136,22 +138,17 @@ public class MainActivity extends Activity
                     mSocket socket = mSocket.getInstance();
                     SocketAddress socketAddress = new InetSocketAddress(HOST,PORT);
                     socket.connect(socketAddress,300);
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    out = socket.getOutputStream();
-                    String str = "{\"name\":\"get\"}";
-                    JSONObject json = new JSONObject(str);
-                    out.write(json.toString().getBytes());
-                    str = in.readLine();
+                    InputStream in = mSocket.getIn();
+                    byte [] buffer = new byte[1024];
+                    in.read(buffer,0,1024);
                     message.what = 1;
-                    message.obj = str;
+                    message.obj = new String(buffer);
                 }
                 catch(IOException e)
                 {
                     e.printStackTrace();
                     message.what = 0;
                     message.obj = "error";
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
                 mHandler.sendMessage(message);
             }

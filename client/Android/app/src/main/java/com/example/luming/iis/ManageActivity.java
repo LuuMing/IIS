@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class ManageActivity extends AppCompatActivity {
     BottomNavigationView navigationView;
     MenuItem   menuItem;
     List<Fragment> fragmentList = new ArrayList<>();
-    mSocket socket;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -42,7 +41,6 @@ public class ManageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
-         socket = mSocket.getInstance();
         navigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.viewpager_launch);
         setNavigation();
@@ -82,5 +80,4 @@ public class ManageActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
     }
-
 }
