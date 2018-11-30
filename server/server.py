@@ -34,13 +34,15 @@ class MyServer(socketserver.BaseRequestHandler):
 			else:
 				component = config[data['name']]
 				if component['type'] == 'action':
-					if component['source']	== 'os':
-						os.system(component['cmd'])
-						respons = {'content':'success'}
+					os.system(component['cmd'])
+					respons = {'content':'success'}
 
 				elif component['type'] == 'status':
-					if component['source'] == 'os':
-						respons = {'content':os.popen(component["cmd"]).read()}
+					respons = {'content':os.popen(component["cmd"]).read()}
+				
+				elif component['type'] == 'setter':
+					respons = {'content':os.system(component['cmd']+" " + data['value'])}
+						
 			respons = json.dumps(respons)
 			conn.sendall(respons.encode())
 			print(respons,'sended')

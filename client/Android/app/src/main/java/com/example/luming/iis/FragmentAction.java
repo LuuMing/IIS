@@ -1,6 +1,5 @@
 package com.example.luming.iis;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,8 +27,8 @@ private ArrayAdapter<String> adapter;
 private JSONObject config;
 private Button button;
 private EditText editText;
-private Handler mhandler;
-    @Nullable
+private JSONObject cmd;
+@Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_action,container,false);
@@ -72,38 +71,40 @@ private Handler mhandler;
                    {
                        case "action":
                            Toast.makeText(getActivity(),"ACTION", Toast.LENGTH_SHORT).show();
-                           editText.setClickable(false);
+                           editText.setFocusableInTouchMode(false);
+                           editText.setFocusable(false);
                            editText.setText(action+"：执行");
                            button.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
-                                   JSONObject jsonObject;
-                                   String str ="{\"name\":\""+action+"\"}";
-                                           Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
-                                   try {
-                                       jsonObject = new JSONObject(str);
-                                       send(jsonObject);
-                                   } catch (JSONException e) {
-                                       e.printStackTrace();
-                                   }
+                                   String str = new String("{\"name\":\""+action+"\"}");
+                                   Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
+                                    send(str);
                                }
                            });
                            break;
                        case "setter":
                            Toast.makeText(getContext(),"SETTER", Toast.LENGTH_SHORT).show();
                            editText.setText("请输入控制量");
-                           editText.setClickable(true);
+                           button.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View view) {
+                                   String value = editText.getText().toString().trim();
+                                   String str = ( "{\"name\":\""+action+"\",\"value\":\""+value+"\"}");
+                                   Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
+                                   send(str);
+                               }
+                           });
                            break;
                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
 
-    private void send( final JSONObject json)
+    private void send( final String json)
     {
         new Thread()
         {
@@ -111,11 +112,14 @@ private Handler mhandler;
             public void run()
             {
                 try{
-                   OutputStream out = mSocket.getOut();
-                   out.write(json.toString().getBytes());
+                   JSONObject j = new JSONObject(json);
+                    OutputStream out = mSocket.getOut();
+                   out.write(j.toString().getBytes());
                 }
                 catch(IOException e)
                 {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

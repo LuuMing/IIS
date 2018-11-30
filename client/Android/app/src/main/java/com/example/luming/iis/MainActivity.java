@@ -27,9 +27,6 @@ public class MainActivity extends Activity
     private List<Device> DeviceList = new ArrayList<Device>();
     private Button btnAdd;
     private deviceAdapter adapter;
-    private Socket socket = null;
-    private BufferedReader in;
-    private OutputStream out;
      private static  Handler mHandler;
     @Override
     public void onCreate(Bundle savedInstanceState)
