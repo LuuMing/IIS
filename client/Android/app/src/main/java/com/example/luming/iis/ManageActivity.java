@@ -73,9 +73,9 @@ public class ManageActivity extends AppCompatActivity {
             }
         });
         FragmentAction fragmentAction = new FragmentAction();
-
+        FragmentStatus fragmentStatus = new FragmentStatus();
         fragmentList.add(fragmentAction);
-
+        fragmentList.add(fragmentStatus);
         BottomViewAdapter adapter = new BottomViewAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);

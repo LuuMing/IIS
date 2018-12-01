@@ -41,7 +41,8 @@ class MyServer(socketserver.BaseRequestHandler):
 					respons = {'content':os.popen(component["cmd"]).read()}
 				
 				elif component['type'] == 'setter':
-					respons = {'content':os.system(component['cmd']+" " + data['value'])}
+					os.system(component['cmd']+" " + data['value'])
+					respons = {'content':'success'}
 						
 			respons = json.dumps(respons)
 			conn.sendall(respons.encode())

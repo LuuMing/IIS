@@ -1,5 +1,8 @@
 package com.example.luming.iis;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +31,7 @@ private ArrayAdapter<String> adapter;
 private JSONObject config;
 private Button button;
 private EditText editText;
-private JSONObject cmd;
+private Handler handler;
 @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,6 +41,18 @@ private JSONObject cmd;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        handler = new Handler()
+        {
+            public void handleMessage(Message msg)
+            {
+                super.handleMessage(msg);
+                try {
+                    Toast.makeText(getActivity(), ((JSONObject)msg.obj).getString("content") , Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         listView = getActivity().findViewById(R.id.action_list);
         try {
             config = new JSONObject((String)getActivity().getIntent().getExtras().get("json"));
@@ -80,12 +96,16 @@ private JSONObject cmd;
                                    String str = new String("{\"name\":\""+action+"\"}");
                                    Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
                                     send(str);
+                                    receive();
                                }
                            });
                            break;
                        case "setter":
                            Toast.makeText(getContext(),"SETTER", Toast.LENGTH_SHORT).show();
-                           editText.setText("请输入控制量");
+                           editText.setFocusableInTouchMode(true);
+                           editText.setFocusable(true);
+                           editText.setText("");
+                           editText.setHint("请输入控制量");
                            button.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
@@ -93,6 +113,7 @@ private JSONObject cmd;
                                    String str = ( "{\"name\":\""+action+"\",\"value\":\""+value+"\"}");
                                    Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
                                    send(str);
+                                   receive();
                                }
                            });
                            break;
@@ -120,6 +141,31 @@ private JSONObject cmd;
                 {
                     e.printStackTrace();
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+    private void receive()
+    {
+        new Thread()
+        {
+            Message message = new Message();
+            @Override
+            public void run()
+            {
+                try {
+                    byte[] buffer = new byte[1024];
+                    InputStream inputStream = mSocket.getIn();
+                    inputStream.read(buffer);
+                    JSONObject jsonObject = new JSONObject(new String(buffer));
+                    message.obj = jsonObject;
+                    handler.sendMessage(message);
+                }catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
