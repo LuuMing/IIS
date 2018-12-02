@@ -5,18 +5,9 @@ import android.content.Intent;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +43,7 @@ public class MainActivity extends Activity
             }
         };
         this.setContentView(R.layout.content_main);
-        dbOperator = new DatabaseOperator(this);
+        dbOperator = DatabaseOperator.getInstance(this);
         adapter = new deviceAdapter( MainActivity.this,R.layout.list_item, DeviceList );
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
@@ -96,7 +87,7 @@ public class MainActivity extends Activity
                         Integer device_port = Integer.parseInt(port.getText().toString().trim());
                         // 打印出来
                        Toast.makeText(MainActivity.this, "名称: " + device_name + ", IP地址: " + device_ip + "端口"+device_port, Toast.LENGTH_SHORT).show();
-                        dbOperator.add(new Device(device_name,device_ip,device_port));
+                        dbOperator.addDevice(new Device(device_name,device_ip,device_port));
                         onResume();
                     }
                 });
@@ -118,7 +109,7 @@ public class MainActivity extends Activity
         super.onResume();
         if(adapter != null){
             DeviceList.clear();
-            DeviceList.addAll(dbOperator.queryAll());
+            DeviceList.addAll(dbOperator.queryAllDevice());
             adapter.notifyDataSetChanged();
         }
     }

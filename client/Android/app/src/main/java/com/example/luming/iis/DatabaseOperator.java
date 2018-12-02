@@ -13,18 +13,28 @@ import java.util.List;
  */
 
 public class DatabaseOperator {
-    private MyDatabaseHelper dbHelper;
-    private SQLiteDatabase db;
-    public DatabaseOperator(Context context)
+    private static MyDatabaseHelper dbHelper;
+    private static SQLiteDatabase db;
+    private static DatabaseOperator databaseOperator;
+    private DatabaseOperator(Context context)
     {
-        dbHelper = new MyDatabaseHelper(context,"deviceDB",null,1);
+        dbHelper = new MyDatabaseHelper(context,"IIS_DB",null,1);
         db = dbHelper.getWritableDatabase();
     }
-    public void add(Device device)
+    public static DatabaseOperator getInstance(Context context)
+    {
+        if(databaseOperator == null)
+        {
+            databaseOperator = new DatabaseOperator(context);
+        }
+        return databaseOperator;
+    }
+
+    public void addDevice(Device device)
     {
         db.execSQL("insert into device_table(name,ip,port) values(?,?,?)",new Object[]{device.getName(),device.getIp(),device.getPort()});
     }
-    public List<Device> queryAll()
+    public List<Device> queryAllDevice()
     {
         ArrayList<Device> list = new ArrayList<Device>();
         Cursor c = db.rawQuery("select name,ip,port from device_table", null);
@@ -35,4 +45,5 @@ public class DatabaseOperator {
         c.close();
         return list;
     }
+
 }
