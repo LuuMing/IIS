@@ -143,6 +143,17 @@ public class FragmentStatus extends Fragment {
             }
         }.start();
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+    super.setUserVisibleHint(isVisibleToUser);
+    if (isVisibleToUser) {
+            isDestroy = false;
+        } else {
+            isDestroy = true;
+        }
+    }
+
+
 }
 
 
