@@ -27,8 +27,11 @@ public class FragmentStatus extends Fragment {
     private ArrayAdapter<String> adapter;
     private JSONObject config;
     private Handler handler;
-    private String module_name;
     private Boolean isDestroy;
+    private String module_name;
+    private String send_cmd;
+    private String rec_value;
+    private DatabaseOperator databaseOperator;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class FragmentStatus extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isDestroy  = new Boolean(false);
+        databaseOperator = DatabaseOperator.getInstance(getContext());
+
         handler = new Handler()
         {
             public void handleMessage(Message msg)
@@ -53,7 +58,13 @@ public class FragmentStatus extends Fragment {
                     }
                     break;
                     case 1 :
-                        Toast.makeText(getActivity(), msg.toString() , Toast.LENGTH_SHORT).show();
+                        try {
+                            rec_value = ((JSONObject)msg.obj).getString("content");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getActivity(), rec_value , Toast.LENGTH_SHORT).show();
+                        databaseOperator.addLog(module_name,send_cmd,rec_value);
                         removeMessages(1);
                         if(!isDestroy)
                             sendEmptyMessageDelayed(0, 1000);
@@ -152,8 +163,6 @@ public class FragmentStatus extends Fragment {
             isDestroy = true;
         }
     }
-
-
 }
 
 

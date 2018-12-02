@@ -31,7 +31,10 @@ private JSONObject config;
 private Button button;
 private EditText editText;
 private Handler handler;
-
+private String moduleName;
+private String send_cmd;
+private String rec_value;
+private DatabaseOperator databaseOperator;
 @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,11 +51,14 @@ private Handler handler;
                 super.handleMessage(msg);
                 try {
                     Toast.makeText(getActivity(), ((JSONObject)msg.obj).getString("content") , Toast.LENGTH_SHORT).show();
+                    rec_value =  ((JSONObject)msg.obj).getString("content");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                databaseOperator.addLog(moduleName,send_cmd,rec_value);
             }
         };
+        databaseOperator = DatabaseOperator.getInstance(getContext());
         listView = getActivity().findViewById(R.id.action_list);
         try {
             config = new JSONObject((String)getActivity().getIntent().getExtras().get("json"));
@@ -80,20 +86,20 @@ private Handler handler;
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 button = getActivity().findViewById(R.id.action_button);
                 editText = getActivity().findViewById(R.id.action_text);
-                final String action = (String) adapterView.getItemAtPosition(i);
+                moduleName = (String) adapterView.getItemAtPosition(i);
                 try {
-                   JSONObject setting = new JSONObject(config.getString(action));
+                   JSONObject setting = new JSONObject(config.getString(moduleName));
                    switch (setting.getString("type"))
                    {
                        case "action":
                            Toast.makeText(getActivity(),"ACTION", Toast.LENGTH_SHORT).show();
                            editText.setFocusableInTouchMode(false);
                            editText.setFocusable(false);
-                           editText.setText(action+"：执行");
+                           editText.setText(moduleName+"：执行");
                            button.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
-                                   String str = new String("{\"name\":\""+action+"\"}");
+                                   String str = new String("{\"name\":\""+moduleName+"\"}");
                                    Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
                                     send(str);
                                     receive();
@@ -109,8 +115,8 @@ private Handler handler;
                            button.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
-                                   String value = editText.getText().toString().trim();
-                                   String str = ( "{\"name\":\""+action+"\",\"value\":\""+value+"\"}");
+                                   send_cmd = editText.getText().toString().trim();
+                                   String str = ( "{\"name\":\""+moduleName+"\",\"value\":\""+send_cmd+"\"}");
                                    Toast.makeText(getActivity(), str , Toast.LENGTH_SHORT).show();
                                    send(str);
                                    receive();

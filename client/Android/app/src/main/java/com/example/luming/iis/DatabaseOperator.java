@@ -45,5 +45,8 @@ public class DatabaseOperator {
         c.close();
         return list;
     }
-
+    public void addLog(String name, String send, String value)
+    {
+        db.execSQL("insert into log_table(name,send,value) values(?,?,?)",new Object[]{name,send,value});
+    }
 }
