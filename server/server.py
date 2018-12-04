@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from libs.helper import *
+from json.decoder import JSONDecodeError
 
 config = None
 
@@ -27,7 +28,10 @@ class MyServer(socketserver.BaseRequestHandler):
 		flag = True
 		while flag:
 			raw_data = conn.recv(1024).decode()
-			data = json.loads(raw_data)
+			try:
+				data = json.loads(raw_data)
+			except JSONDecodeError:
+				print('Json Decode error')
 			print(data,'receive')
 			if data['name'] == 'exit':
 				flag = False

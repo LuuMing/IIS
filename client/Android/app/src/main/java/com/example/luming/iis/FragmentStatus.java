@@ -1,16 +1,23 @@
 package com.example.luming.iis;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -20,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class FragmentStatus extends Fragment {
     private ListView listView;
     private List<String> list = new ArrayList<>();
@@ -29,9 +35,12 @@ public class FragmentStatus extends Fragment {
     private Handler handler;
     private Boolean isDestroy;
     private String module_name;
-    private String send_cmd;
+    private String send_cmd;      //暂时没用
     private String rec_value;
     private DatabaseOperator databaseOperator;
+    private LineChart lineChart;
+    private String numData;
+    private EditText editText;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +50,12 @@ public class FragmentStatus extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        lineChart = (LineChart) getActivity().findViewById(R.id.lineChart);
+
+
         isDestroy  = new Boolean(false);
+
         databaseOperator = DatabaseOperator.getInstance(getContext());
 
         handler = new Handler()
@@ -65,6 +79,7 @@ public class FragmentStatus extends Fragment {
                         }
                         Toast.makeText(getActivity(), rec_value , Toast.LENGTH_SHORT).show();
                         databaseOperator.addLog(module_name,send_cmd,rec_value);
+                        drawlineChart();
                         removeMessages(1);
                         if(!isDestroy)
                             sendEmptyMessageDelayed(0, 1000);
@@ -73,6 +88,10 @@ public class FragmentStatus extends Fragment {
 
             }
         };
+
+        editText = getActivity().findViewById(R.id.numData);
+        editText.setText("50");
+
         listView = getActivity().findViewById(R.id.status_list);
         try {
             config = new JSONObject((String)getActivity().getIntent().getExtras().get("json"));
@@ -98,10 +117,12 @@ public class FragmentStatus extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                isDestroy = false;
                 module_name = (String) adapterView.getItemAtPosition(i);
                 send("{\"name\":\""+module_name+"\"}");
                 Toast.makeText(getActivity(), module_name , Toast.LENGTH_SHORT).show();
                 receive();
+
             }
         });
     }
@@ -162,6 +183,39 @@ public class FragmentStatus extends Fragment {
         } else {
             isDestroy = true;
         }
+    }
+    private void drawlineChart()
+    {
+        numData = editText.getText().toString().trim();
+        if(numData.equals(""))
+            numData = "10";
+        List<Pair<String,Float>> list = databaseOperator.queryLog(module_name,numData);
+        List<Entry> entries = new ArrayList<>();
+        for(int i = 0; i < list.size(); ++i)
+        {
+            entries.add(new Entry(i,list.get(i).second));
+        }
+        LineDataSet lineDataSet = new LineDataSet(entries,"data");
+        lineDataSet.setColor(Color.RED);
+        //设置每个点的颜色
+        lineDataSet.setCircleColor(Color.YELLOW);
+        //设置该线的宽度
+        lineDataSet.setLineWidth(1f);
+        //设置每个坐标点的圆大小
+        //lineDataSet.setCircleRadius(1f);
+        //设置是否画圆
+        lineDataSet.setDrawCircles(false);
+        // 设置平滑曲线模式
+        //  lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        //设置线一面部分是否填充颜色
+        lineDataSet.setDrawFilled(true);
+        //设置填充的颜色
+        lineDataSet.setFillColor(Color.BLUE);
+        //设置是否显示点的坐标值
+        lineDataSet.setDrawValues(false);
+        LineData lineData = new LineData(lineDataSet);
+        lineChart.setData(lineData);
+        lineChart.invalidate();
     }
 }
 
