@@ -18,8 +18,10 @@ class MyServer(socketserver.BaseRequestHandler):
         		config.write(configfile)
 		if sys.platform == 'win32':
 			os.system('tools\ini2json.exe config.ini')
-		else:
-			os.system('./tools/ini2json config.ini')
+		else if sys.platform == 'linux2':
+			os.system('./tools/ini2json_ARM config.ini')
+                else:
+                        os.system('./tools/ini2json config.ini')
 		with open('config.json','r') as f:
 			respons = json.loads(f.read())
 		respons = json.dumps(respons)
