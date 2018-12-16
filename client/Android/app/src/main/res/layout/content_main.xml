@@ -6,14 +6,21 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="add"
+        android:text="添加设备"
         android:id="@+id/btnAdd" />
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+    <Button
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        >
-    </ListView>
-
-
+        android:text="登陆"
+        android:id="@+id/btnLog" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:id="@+id/btnReg" />
 </LinearLayout>
