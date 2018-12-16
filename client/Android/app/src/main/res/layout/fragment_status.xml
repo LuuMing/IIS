@@ -39,7 +39,18 @@
             android:drawablePadding="10dp"
             android:padding="10dp"
             android:layout_marginTop="20dp"/>
-
+        <EditText
+            android:id="@+id/delayTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@null"
+            android:inputType="number"
+            android:maxLength="4"
+            android:hint="采样间隔"
+            android:drawablePadding="10dp"
+            android:padding="10dp"/>
     </LinearLayout>
 
 </LinearLayout>

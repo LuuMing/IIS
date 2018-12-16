@@ -20,8 +20,8 @@ class MyServer(socketserver.BaseRequestHandler):
 			os.system('tools\ini2json.exe config.ini')
 		elif sys.platform == 'linux2':
 			os.system('./tools/ini2json_ARM config.ini')
-                else:
-                        os.system('./tools/ini2json config.ini')
+		else:
+			os.system('./tools/ini2json config.ini')
 		with open('config.json','r') as f:
 			respons = json.loads(f.read())
 		respons = json.dumps(respons)

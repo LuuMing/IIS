@@ -39,8 +39,10 @@ public class FragmentStatus extends Fragment {
     private String rec_value;
     private DatabaseOperator databaseOperator;
     private LineChart lineChart;
-    private String numData;
-    private EditText editText;
+    private String numData = "50";
+    private EditText editTextDataNum;
+    private EditText editTextDelayTime;
+    private Integer delayTime = 1;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,8 +54,6 @@ public class FragmentStatus extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         lineChart = (LineChart) getActivity().findViewById(R.id.lineChart);
-
-
         isDestroy  = new Boolean(false);
 
         databaseOperator = DatabaseOperator.getInstance(getContext());
@@ -77,20 +77,24 @@ public class FragmentStatus extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getActivity(), rec_value , Toast.LENGTH_SHORT).show();
+                        String tmpDealyTime = editTextDelayTime.getText().toString();
+                        if(tmpDealyTime.equals(""))
+                            delayTime = 1;
+                        else
+                            delayTime = Integer.parseInt(tmpDealyTime);
                         databaseOperator.addLog(module_name,send_cmd,rec_value);
                         drawlineChart();
                         removeMessages(1);
                         if(!isDestroy)
-                            sendEmptyMessageDelayed(0, 1000);
+                            sendEmptyMessageDelayed(0, delayTime * 1000);
                         break;
                 }
 
             }
         };
 
-        editText = getActivity().findViewById(R.id.numData);
-        editText.setText("50");
+        editTextDataNum = getActivity().findViewById(R.id.numData);
+        editTextDelayTime = getActivity().findViewById(R.id.delayTime);
 
         listView = getActivity().findViewById(R.id.status_list);
         try {
@@ -186,7 +190,7 @@ public class FragmentStatus extends Fragment {
     }
     private void drawlineChart()
     {
-        numData = editText.getText().toString().trim();
+        numData = editTextDataNum.getText().toString().trim();
         if(numData.equals(""))
             numData = "10";
         List<Pair<String,Float>> list = databaseOperator.queryLog(module_name,numData);
