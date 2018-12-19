@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class MainActivity extends Activity
     private static  Handler mHandler;
     private EditText mUserNameText;
     private EditText mUserPassWordText;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
+    private String userId;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -53,6 +55,7 @@ public class MainActivity extends Activity
                         editor.commit();
                         btnLog.setText("用户 ID: "+msg.obj);
                         btnLog.setActivated(false);
+                        sync();
                         break;
                     case 3:
                         Toast.makeText(MainActivity.this, (String)msg.obj , Toast.LENGTH_SHORT).show();
@@ -81,7 +84,18 @@ public class MainActivity extends Activity
         btnAdd = this.findViewById(R.id.btnAdd);
         btnLog = this.findViewById(R.id.btnLog);
         btnReg = this.findViewById(R.id.btnReg);
-        btnLog.setText("用户 ID: "+ sharedPreferences.getString("user_id","点击登陆"));
+
+        // 获取登陆信息并同步--start
+        userId = sharedPreferences.getString("user_id","NULL");
+        if(userId.equals("NULL"))
+            btnLog.setText("点击登陆");
+        else
+        {
+            btnLog.setText("用户 ID: "+ userId);
+            sync();
+        }
+        // 获取登陆信息并同步--end
+
         btnAdd.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -269,6 +283,32 @@ public class MainActivity extends Activity
             }
             mHandler.sendMessage(message);
         }
+    }
+    private void sync()
+    {
+        Toast.makeText(MainActivity.this, "同步数据" , Toast.LENGTH_SHORT).show();
+        new Thread()
+        {
+            @Override
+            public void run()
+            {
+                String localTime = dbOperator.queryRecentTime();
+                String webTime = WebService.getWebRecTime(userId);
+                Log.e("123","local time " + localTime + "webTime " + webTime);
+                if(localTime.equals("NULL")&& webTime.equals("NULL") || localTime.equals(webTime))
+                    return;
+                if(localTime.compareTo(webTime) > 0 || webTime.equals("NULL")) //上传
+                {
+                    String json = dbOperator.queryRecentData(webTime);
+                    Log.e("123","upload");
+                    WebService.upLoad(userId,json);
+                }
+                else {         //下拉
+
+                }
+
+            }
+        }.start();
     }
 
 }

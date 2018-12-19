@@ -4,14 +4,20 @@ package com.example.luming.iis;
  * Created by jazzyin on 2016/3/25.
  */
 
+import android.content.SharedPreferences;
+import android.provider.ContactsContract;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class WebService {
     private static String IP = "192.168.43.111:8080";
+    private static DatabaseOperator db;
     //把TOMCATURL改为你的服务地址
 
     /**
@@ -20,15 +26,32 @@ public class WebService {
      * @return
      */
     public static String executeHttpGet(String url,String username, String password ) {
+        String path = "http://" + IP + "/HelloWeb/";
+        path = path + url + "?username=" + username + "&password=" + password ;
+        return connect(path);
+    }
+    public static String getWebRecTime(String userId)
+    {
+        String path = "http://" + IP + "/HelloWeb/RecLet?id="+userId;
+        return connect(path);
+    }
+    public static void upLoad(String id, String jsonArray)  {
+
+        String path = null;
+        try {
+            path = "http://" + IP + "/HelloWeb/SyncLet?id="+id+"&data="+URLEncoder.encode(jsonArray,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        connect(path);
+    }
+    private static String connect(String path)
+    {
         HttpURLConnection conn = null;
         InputStream is = null;
-
         try {
             // 用户名 密码
             // URL 地址
-            String path = "http://" + IP + "/HelloWeb/";
-            path = path + url + "?username=" + username + "&password=" + password ;
-
             conn = (HttpURLConnection) new URL(path).openConnection();
             conn.setConnectTimeout(3000); // 设置超时时间
             conn.setReadTimeout(3000);
@@ -56,11 +79,9 @@ public class WebService {
                     e.printStackTrace();
                 }
             }
-
         }
         return "NULL";
     }
-
     // 将输入流转化为 String 型
     private static String parseInfo(InputStream inStream) throws Exception {
         byte[] data = read(inStream);
@@ -79,4 +100,5 @@ public class WebService {
         inStream.close();
         return outputStream.toByteArray();
     }
+
 }

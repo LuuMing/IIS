@@ -35,7 +35,7 @@ public class FragmentStatus extends Fragment {
     private Handler handler;
     private Boolean isDestroy;
     private String module_name;
-    private String send_cmd;      //暂时没用
+    private String send_cmd = "NULL";      //暂时没用
     private String rec_value;
     private DatabaseOperator databaseOperator;
     private LineChart lineChart;
