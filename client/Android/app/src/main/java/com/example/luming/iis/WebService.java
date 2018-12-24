@@ -45,6 +45,12 @@ public class WebService {
         }
         connect(path);
     }
+    public static String pull(String id,String time)
+    {
+        String path = null;
+        path = "http://" + IP + "/HelloWeb/PullLet?id="+id+"&time="+time;
+        return connect(path);
+    }
     private static String connect(String path)
     {
         HttpURLConnection conn = null;

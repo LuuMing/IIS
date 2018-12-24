@@ -51,6 +51,7 @@ public class MainActivity extends Activity
                     case 2:
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         //把数据进行保存
+                        userId = msg.obj.toString();
                         editor.putString("user_id",msg.obj.toString());
                         editor.commit();
                         btnLog.setText("用户 ID: "+msg.obj);
@@ -297,14 +298,14 @@ public class MainActivity extends Activity
                 Log.e("123","local time " + localTime + "webTime " + webTime);
                 if(localTime.equals("NULL")&& webTime.equals("NULL") || localTime.equals(webTime))
                     return;
-                if(localTime.compareTo(webTime) > 0 || webTime.equals("NULL")) //上传
+                if((localTime.compareTo(webTime) > 0 || webTime.equals("NULL")) && !localTime.equals("NULL")) //上传
                 {
                     String json = dbOperator.queryRecentData(webTime);
                     Log.e("123","upload");
                     WebService.upLoad(userId,json);
                 }
                 else {         //下拉
-
+                    dbOperator.addFromJsonArray(WebService.pull(userId,localTime));
                 }
 
             }

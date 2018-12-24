@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,6 +55,38 @@ public class DatabaseOperator {
     {
         db.execSQL("insert into data (module_name,send,value) values(?,?,?)",new Object[]{name,send,value});
     }
+    public void addFromJsonArray(String jsonArrayStr)
+    {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayStr);
+            for(int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String item = "";
+                String value = "";
+                Iterator it = jsonObject.keys();
+                while(it.hasNext())
+                {
+                    String key = it.next().toString();
+                    if(null != key )
+                    {
+                        item += key;
+                        value += "\'" +  jsonObject.getString(key) +"\'";
+                        if(it.hasNext())
+                        {
+                            item += ",";
+                            value += ",";
+                        }
+                    }
+                }
+                String sql = "insert into data(" + item + ") values(" + value + ")";
+                Log.e("pull",sql);
+                db.execSQL(sql);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     public List<Pair<String,Float>> queryLog(String module_name,String num)
     {
         ArrayList<Pair<String,Float>> list = new ArrayList<>();
@@ -80,10 +113,10 @@ public class DatabaseOperator {
             sql = "select * from data";
         else
             sql = "select * from data where time > \""+start + "\"";
-        Log.e("sql",sql);
+       // Log.e("sql",sql);
         Cursor c = db.rawQuery(sql,null);
         int num = c.getColumnCount();
-        JSONArray array=new JSONArray();
+        JSONArray array = new JSONArray();
         while(c.moveToNext())
         {
             JSONObject mapOfColValues = new JSONObject();
