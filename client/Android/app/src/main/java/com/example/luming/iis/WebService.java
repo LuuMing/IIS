@@ -16,9 +16,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class WebService {
-    private static String IP = "192.168.43.111:8080";
-    private static DatabaseOperator db;
-    //把TOMCATURL改为你的服务地址
+    private static String IP = "192.168.43.111:8080"; //修改为你的服务器 IP 地址
 
     /**
      * 通过Get方式获取HTTP服务器数据
@@ -26,20 +24,20 @@ public class WebService {
      * @return
      */
     public static String executeHttpGet(String url,String username, String password ) {
-        String path = "http://" + IP + "/HelloWeb/";
+        String path = "http://" + IP + "/IIS/";
         path = path + url + "?username=" + username + "&password=" + password ;
         return connect(path);
     }
     public static String getWebRecTime(String userId)
     {
-        String path = "http://" + IP + "/HelloWeb/RecLet?id="+userId;
+        String path = "http://" + IP + "/IIS/RecLet?id="+userId;
         return connect(path);
     }
     public static void upLoad(String id, String jsonArray)  {
 
         String path = null;
         try {
-            path = "http://" + IP + "/HelloWeb/SyncLet?id="+id+"&data="+URLEncoder.encode(jsonArray,"UTF-8");
+            path = "http://" + IP + "/IIS/SyncLet?id="+id+"&data="+URLEncoder.encode(jsonArray,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -48,7 +46,7 @@ public class WebService {
     public static String pull(String id,String time)
     {
         String path = null;
-        path = "http://" + IP + "/HelloWeb/PullLet?id="+id+"&time="+time;
+        path = "http://" + IP + "/IIS/PullLet?id="+id+"&time="+time;
         return connect(path);
     }
     private static String connect(String path)
