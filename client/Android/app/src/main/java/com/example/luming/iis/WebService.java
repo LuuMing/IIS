@@ -67,7 +67,7 @@ public class WebService {
                 is = conn.getInputStream();
                 return parseInfo(is);
             }
-            return null;
+            return "NULL";
 
         }catch (Exception e) {
             e.printStackTrace();
