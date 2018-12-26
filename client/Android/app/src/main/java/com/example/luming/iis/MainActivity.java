@@ -295,8 +295,8 @@ public class MainActivity extends Activity
             {
                 String localTime = dbOperator.queryRecentTime();
                 String webTime = WebService.getWebRecTime(userId);
-                Log.e("123","local time " + localTime + "webTime " + webTime);
-                if(localTime.equals("NULL")&& webTime.equals("NULL") || localTime.equals(webTime))
+                Log.e("123","local time " + localTime + " webTime " + webTime);
+                if((localTime.equals("NULL")&& webTime.equals("NULL")) || localTime.contains(webTime))  //因为 sqlite 查询会多出小数点，因此使用 contains 判断时间相等
                     return;
                 if((localTime.compareTo(webTime) > 0 || webTime.equals("NULL")) && !localTime.equals("NULL")) //上传
                 {

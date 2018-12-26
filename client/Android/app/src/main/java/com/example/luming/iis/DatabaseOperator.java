@@ -113,7 +113,7 @@ public class DatabaseOperator {
             sql = "select * from data";
         else
             sql = "select * from data where time > \""+start + "\"";
-       // Log.e("sql",sql);
+        Log.e("sql",sql);
         Cursor c = db.rawQuery(sql,null);
         int num = c.getColumnCount();
         JSONArray array = new JSONArray();
