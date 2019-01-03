@@ -2,24 +2,16 @@
 IIS（Intelligent Infrasture System）是一套 IoT 系统，包含运行在 Andorid 平台上的客户端（client），运行在 raspberry 上的服务端（server）以及数据中心（center）。实现数据采集，设备控制等功能。
 ![](./umlUseCaseDiagram.jpg)
 
-<center>用例图</center>
+![](./detail.jpg)
 
 ![](./client.jpg)
 
-<center>客户端示意</center>
-
 ![](./server.jpg)
 
-<center>服务端示意</center>
-
 ### Installation
-
 ##### Client
-
 [下载]()并安装
-
 ##### Server
-
 `git clone https://github.com/LuuMing/IIS.git` 克隆项目
 
 `cd IIS/server` 进入 server 文件夹
