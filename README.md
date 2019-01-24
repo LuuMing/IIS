@@ -4,7 +4,7 @@ IIS（Intelligent Infrasture System）是一套 IoT 系统，包含运行在 And
 
 ![](./detail.jpg)
 
-![](./client.jpg)
+![](./client.gif)
 
 ![](./server.jpg)
 
