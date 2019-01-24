@@ -10,7 +10,7 @@ IIS（Intelligent Infrasture System）是一套 IoT 系统，包含运行在 And
 
 ### Installation
 ##### Client
-[下载]()并安装
+[下载](https://github.com/LuuMing/IIS/blob/master/client/build/app-release.apk?raw=true)并安装
 ##### Server
 `git clone https://github.com/LuuMing/IIS.git` 克隆项目
 
