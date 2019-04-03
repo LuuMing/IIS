@@ -24,6 +24,15 @@ public class LogLet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		
+	}
+
+	/**
+	 * The doPost method of the Server let.
+	 */
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// 接收信息
 		String username = request.getParameter("username");
 		username = new String(username.getBytes("ISO-8859-1"), "UTF-8");
@@ -36,28 +45,14 @@ public class LogLet extends HttpServlet {
 
 		// 验证处理
 		info = serv.login(username, password);
-		
-		 // 返回信息
-		 response.setCharacterEncoding("UTF-8");
-		 response.setContentType("text/html");
-		 PrintWriter out = response.getWriter();
-		 out.print(info);
-		 out.flush();
-		 out.close();
-
-	}
-
-	/**
-	 * The doPost method of the Server let.
-	 */
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		// 测试为何手机端中文乱码，电脑正常
-		// System.out.println("u1--"+username);
-		// System.out.println("u2--"+username);
-
+				
+		// 返回信息
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.print(info);
+		out.flush();
+		out.close();
 	}
 
 }

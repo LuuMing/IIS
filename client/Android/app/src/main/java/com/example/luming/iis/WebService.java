@@ -53,7 +53,7 @@ public class WebService {
             conn.setConnectTimeout(3000); // 设置超时时间
             conn.setReadTimeout(3000);
             conn.setDoInput(true);
-            conn.setRequestMethod("GET"); // 设置获取信息方式
+            conn.setRequestMethod("POST"); // 设置获取信息方式
             conn.setRequestProperty("Charset", "UTF-8"); // 设置接收数据编码格式
 
             if (conn.getResponseCode() == 200) {

@@ -19,16 +19,6 @@ public class SyncLet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		// 新建服务对象
-		Service serv = new Service();
-		
-		// 接收注册信息
-		String userId = request.getParameter("id");
-		String data = request.getParameter("data");
-		System.out.println("Sync  "+ userId);
-		System.out.println("data  "+ data);
-		serv.add(userId, data);
 		
 	}
 
@@ -38,9 +28,15 @@ public class SyncLet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-
-
+		// 新建服务对象
+		Service serv = new Service();
+			
+		// 接收注册信息
+		String userId = request.getParameter("id");
+		String data = request.getParameter("data");
+		System.out.println("Sync  "+ userId);
+		System.out.println("data  "+ data);
+		serv.add(userId, data);
 	}
 
 }

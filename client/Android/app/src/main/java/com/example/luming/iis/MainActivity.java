@@ -166,6 +166,7 @@ public class MainActivity extends Activity
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("user_id","NULL");
                     editor.commit();
+                    btnLog.setText("点击登陆");
                     Message msg = new Message();
                     msg.what = 3;
                     msg.obj = "注销成功";

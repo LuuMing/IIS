@@ -21,24 +21,7 @@ public class RecLet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// 新建服务对象
-		Service serv = new Service();
 		
-		// 接收注册信息
-		String userId = request.getParameter("id");
-		String ret;
-		
-		System.out.println("let  "+ userId);
-		ret = serv.getRecent(userId);
-		System.out.println(ret);
-		// 返回信息
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		
-		out.print(ret.toString());
-		out.flush();
-		out.close();
 	}
 
 	/**
@@ -47,9 +30,24 @@ public class RecLet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-
-
+		// 新建服务对象
+		Service serv = new Service();
+				
+				// 接收注册信息
+		String userId = request.getParameter("id");
+		String ret;
+				
+		System.out.println("let  "+ userId);
+		ret = serv.getRecent(userId);
+		System.out.println(ret);
+				// 返回信息
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+				
+		out.print(ret.toString());
+		out.flush();
+		out.close();
 	}
 
 }

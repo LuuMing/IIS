@@ -70,7 +70,7 @@ public class Service {
 			return ret.getString("time");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.print("¿Õ¼ÇÂ¼");
 		}
 		return "NULL";
 	}
