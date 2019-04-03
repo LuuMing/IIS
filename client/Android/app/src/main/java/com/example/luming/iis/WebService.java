@@ -1,12 +1,5 @@
 package com.example.luming.iis;
 
-/**
- * Created by jazzyin on 2016/3/25.
- */
-
-import android.content.SharedPreferences;
-import android.provider.ContactsContract;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +9,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class WebService {
-    private static String IP = "192.168.43.111:8080"; //修改为你的服务器 IP 地址
+    private static String IP = "192.168.43.253:8080"; //修改为你的服务器 IP 地址
 
     /**
      * 通过Get方式获取HTTP服务器数据

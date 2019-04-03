@@ -31,7 +31,7 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // @mHandler 0: 连接失败 1: 连接成功 2:登陆成功 3:注册成功
+        // @mHandler 0: 连接失败 1: 连接成功 2:登陆成功 3:注册成功 4:注销
         mHandler = new Handler()
         {
             public void handleMessage(Message msg)
@@ -54,8 +54,7 @@ public class MainActivity extends Activity
                         userId = msg.obj.toString();
                         editor.putString("user_id",msg.obj.toString());
                         editor.commit();
-                        btnLog.setText("用户 ID: "+msg.obj);
-                        btnLog.setActivated(false);
+                        btnLog.setText("用户 ID: " + msg.obj + "  点击注销");
                         sync();
                         break;
                     case 3:
@@ -144,29 +143,34 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("登陆我的数据中心");
-                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_login_register, null);
-                builder.setView(view);
-                mUserNameText = view.findViewById(R.id.username);
-                mUserPassWordText  = view.findViewById(R.id.password);
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                attemptLogin();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-
-                    }
-                });
-                builder.show();
+                if(  sharedPreferences.getString("user_id","NULL") .equals( "NULL") ) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("登陆我的数据中心");
+                    View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_login_register, null);
+                    builder.setView(view);
+                    mUserNameText = view.findViewById(R.id.username);
+                    mUserPassWordText  = view.findViewById(R.id.password);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            attemptLogin();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    builder.show();
+                }else{
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("user_id","NULL");
+                    editor.commit();
+                    Message msg = new Message();
+                    msg.what = 3;
+                    msg.obj = "注销成功";
+                    mHandler.sendMessage(msg);
+                }
             }
         });
         btnReg.setOnClickListener(new View.OnClickListener()
@@ -307,7 +311,6 @@ public class MainActivity extends Activity
                 else {         //下拉
                     dbOperator.addFromJsonArray(WebService.pull(userId,localTime));
                 }
-
             }
         }.start();
     }
