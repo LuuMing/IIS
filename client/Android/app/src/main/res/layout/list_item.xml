@@ -9,16 +9,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="10dip" />
+
     <TextView
         android:id="@+id/device_ip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="10dip" />
+
     <TextView
         android:id="@+id/device_port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="10dip" />
+
+    <Button
+        android:id="@+id/device_conn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="连接" />
+
+    <Button
+        android:id="@+id/device_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除" />
 </LinearLayout>

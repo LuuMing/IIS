@@ -16,7 +16,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sql ="create table device ( id integer primary key AUTOINCREMENT, name "
-                +" TEXT NOT NULL, ip TEXT NOT NULL ,port integer NOT NULL )";
+                +" TEXT NOT NULL UNIQUE, ip TEXT NOT NULL ,port integer NOT NULL )";
         String sql2 = "create table data ( id integer primary key AUTOINCREMENT, module_name "
                 +" TEXT NOT NULL, send TEXT default null ,value TEXT,time TimeStamp DEFAULT(datetime('now', 'localtime') ))";
         db.execSQL(sql);

@@ -40,6 +40,9 @@ public class DatabaseOperator {
     {
         db.execSQL("insert into device(name,ip,port) values(?,?,?)",new Object[]{device.getName(),device.getIp(),device.getPort()});
     }
+    public void deleteDevice(Device device){
+        db.execSQL("delete from device where name = ?",new Object[]{device.getName()});
+    }
     public List<Device> queryAllDevice()
     {
         ArrayList<Device> list = new ArrayList<Device>();

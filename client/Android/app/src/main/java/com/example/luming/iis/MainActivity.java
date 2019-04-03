@@ -69,17 +69,6 @@ public class MainActivity extends Activity
         adapter = new deviceAdapter( MainActivity.this,R.layout.list_item, DeviceList );
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Device device = (Device) adapterView.getItemAtPosition(i);
-                //Toast.makeText(MainActivity.this, device.getName()+device.getIp()+device.getPort() , Toast.LENGTH_SHORT).show();
-                connection(device.getIp(),device.getPort());
-                Toast.makeText(MainActivity.this,"正在连接，请稍后", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
 
         btnAdd = this.findViewById(R.id.btnAdd);
         btnLog = this.findViewById(R.id.btnLog);
@@ -215,7 +204,7 @@ public class MainActivity extends Activity
         }
     }
 
-    private void connection(final String HOST, final Integer PORT)
+    public void connection(final String HOST, final Integer PORT)
     {
         new Thread()
         {
@@ -306,7 +295,7 @@ public class MainActivity extends Activity
                 if((localTime.compareTo(webTime) > 0 || webTime.equals("NULL")) && !localTime.equals("NULL")) //上传
                 {
                     String json = dbOperator.queryRecentData(webTime);
-                    Log.e("123","upload");
+                    Log.e("MainActivity","upload");
                     WebService.upLoad(userId,json);
                 }
                 else {         //下拉
